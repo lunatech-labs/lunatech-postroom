@@ -9,6 +9,11 @@
     <version>${revision}</version>
     <packaging>pom</packaging>
 
+    <scm>
+        <developerConnection>scm:git:git@github.com:lunatech-labs/lunatech-postroom.git</developerConnection>
+        <url>https://github.com/lunatech-labs/lunatech-postroom</url>
+    </scm>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>8</maven.compiler.source>
@@ -45,5 +50,28 @@
                 </plugin>
             </plugins>
         </pluginManagement>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>3.0.0-M1</version>
+            </plugin>
+        </plugins>
+
     </build>
+
+    <distributionManagement>
+        <repository>
+            <id>lunatech-releases-public</id>
+            <name>Lunatech Artifactory-releases-public</name>
+            <url>https://artifactory.lunatech.com/artifactory/releases-public</url>
+        </repository>
+        <snapshotRepository>
+            <id>lunatech-snapshots-public</id>
+            <name>Lunatech Artifactory-snapshots-public</name>
+            <url>https://artifactory.lunatech.com/artifactory/snapshots-public</url>
+        </snapshotRepository>
+    </distributionManagement>
+
 </project>
