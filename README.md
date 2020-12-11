@@ -1,6 +1,8 @@
-# Postroom
+# Quarkus Postroom
 
-Validate and bind HTML form data to Java objects. 
+This project is a [Quarkus extension](https://quarkus.io/guides/writing-extensions), designed to ease the creation of HTTP Form. It focuses on binding to/from either Java Records or Java Beans, to Form data.
+
+## TL;DR
 
 Define a form, and class it binds to:
 ```
@@ -17,7 +19,7 @@ userForm.bind(data).fold(
   user -> userRepository.insert(user));
 ```
 
-# Features
+## Features
 
 * Handy out of the box validators
 * Easy to add constraints to mappings
@@ -26,7 +28,7 @@ userForm.bind(data).fold(
 * Unbinding of data to display data in a form
 * Optional type-safe binding and unbinding
 
-# User Guide
+## User Guide
 
 # Credits
 
