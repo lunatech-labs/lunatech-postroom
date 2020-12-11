@@ -16,7 +16,7 @@ public class Generator {
     sb.append("import com.lunatech.postroom.Mapping;\n\n");
     sb.append("public class TypedMappings {\n\n");
 
-    for (int j = 2; j <= i; j++) {
+    for (int j = 1; j <= i; j++) {
       sb.append(IntStream.range(1, j + 1).boxed().map(v -> "A" + v)
           .collect(Collectors.joining(", ", "  public static <", "> TypedMappingStage" + j)));
       sb.append(IntStream.range(1, j + 1).boxed().map(v -> "A" + v).collect(Collectors.joining(", ", "<", ">")));
@@ -28,7 +28,7 @@ public class Generator {
 
     }
     sb.append("\n\n");
-    for (int j = 2; j <= i; j++) {
+    for (int j = 1; j <= i; j++) {
 
       sb.append(IntStream.range(1, j + 1).boxed().map(v -> "A" + v).collect(Collectors.joining(", ", "  public static " + "<", ">")));
       sb.append(IntStream.range(1, j + 1).boxed().map(v -> "A" + v).collect(Collectors.joining(", ", " TypedListWrapper" + j + "<", ">")));

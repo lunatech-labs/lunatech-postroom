@@ -26,7 +26,7 @@ public class GeneratorMojo extends AbstractMojo {
 
   @Override
   public void execute() throws MojoExecutionException, MojoFailureException {
-    for(int i = 2; i <= maxArity; i++) {
+    for(int i = 1; i <= maxArity; i++) {
 
       Path file = targetFolder.toPath()
           .resolve("com/lunatech/postroom/typed/TypedMappingStage" + i + ".java");
@@ -41,7 +41,7 @@ public class GeneratorMojo extends AbstractMojo {
       }
     }
 
-    for(int i = 2; i <= maxArity; i++) {
+    for(int i = 1; i <= maxArity; i++) {
 
       Path file = targetFolder.toPath()
           .resolve("com/lunatech/postroom/typed/TypedListWrapper" + i + ".java");
