@@ -2,10 +2,12 @@ package com.lunatech.postroom;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.lunatech.postroom.FieldMappings.text;
 import static com.lunatech.postroom.Mappings.field;
 import static com.lunatech.postroom.Mappings.mapping;
 import static com.lunatech.postroom.PublicFieldsStructor.publicFields;
@@ -127,6 +129,35 @@ public class FormTest {
 
     assertEquals(Collections.singletonList(
         new FormError("text", "Value should not be empty")), boundForm.getErrors());
+  }
+
+  @Test
+  public void testTransform() {
+    Form<Integer> form = Form.of(text()
+                    .withPrefix("foo")
+                    .transform(Integer::parseInt, Object::toString));
+
+    assertEquals(101,
+            form.bind(Collections.singletonMap("foo", "101")).value());
+
+    assertEquals(Collections.singletonMap("foo", "42"),
+            form.fill(42).data());
+  }
+
+  @Test
+  public void testVerifying() {
+    Form<String> form = Form.of(text()
+            .withPrefix("foo")
+            .verifying(v -> v.length() >= 4, "Length should be at least 4"));
+
+    assertEquals(
+            "banana",
+            form.bind(Collections.singletonMap("foo", "banana")).value());
+
+    assertEquals(
+            Collections.singletonList(new FormError("foo", "Length should be at least 4")),
+            form.bind(Collections.singletonMap("foo", "wo")).getErrors("foo"));
+
   }
 
 }

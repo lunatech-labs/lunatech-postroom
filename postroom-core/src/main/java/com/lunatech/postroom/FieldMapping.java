@@ -1,23 +1,21 @@
 package com.lunatech.postroom;
 
 import io.vavr.control.Either;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+
+import java.util.*;
 import java.util.stream.Collectors;
 
-class StandardMapping<T> implements Mapping<T> {
+class FieldMapping<T> implements Mapping<T> {
 
   private final String key;
   private final List<Constraint<T>> constraints;
   private final Formatter<T> formatter;
 
-  StandardMapping(Formatter<T> formatter) {
+  FieldMapping(Formatter<T> formatter) {
     this("", Collections.emptyList(), formatter);
   }
 
-  StandardMapping(String key, List<Constraint<T>> constraints, Formatter<T> formatter) {
+  FieldMapping(String key, List<Constraint<T>> constraints, Formatter<T> formatter) {
     this.key = key;
     this.constraints = constraints;
     this.formatter = formatter;
@@ -47,15 +45,15 @@ class StandardMapping<T> implements Mapping<T> {
     if(newKey.equals(key)) {
       return this;
     } else {
-      return new StandardMapping<>(newKey, constraints, formatter);
+      return new FieldMapping<>(newKey, constraints, formatter);
     }
   }
 
   @Override
-  public Mapping<T> withConstraint(Constraint<T> constraint) {
-    ArrayList<Constraint<T>> allConstraints = new ArrayList<>(constraints);
-    allConstraints.add(constraint);
-    return new StandardMapping<>(key, allConstraints, formatter);
+  public Mapping<T> verifying(Collection<Constraint<T>> constraints) {
+    ArrayList<Constraint<T>> allConstraints = new ArrayList<>(this.constraints);
+    allConstraints.addAll(constraints);
+    return new FieldMapping<>(key, allConstraints, formatter);
   }
 
 }

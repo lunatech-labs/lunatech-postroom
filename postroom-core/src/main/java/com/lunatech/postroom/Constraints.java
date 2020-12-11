@@ -3,6 +3,7 @@ package com.lunatech.postroom;
 import io.vavr.control.Either;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -10,14 +11,18 @@ public class Constraints {
 
   private final static Valid VALID = new Valid();
 
-  public static <T> Constraint<T> of(Predicate<T> predicate, String message) {
+  public static <T> Constraint<T> of(Predicate<T> predicate, Function<T, String> message) {
     return value -> {
       if (predicate.test(value)) {
         return VALID;
       } else {
-        return new Invalid(message);
+        return new Invalid(message.apply(value));
       }
     };
+  }
+
+  public static <T> Constraint<T> of(Predicate<T> predicate, String message) {
+    return of(predicate, (__) -> message);
   }
 
 

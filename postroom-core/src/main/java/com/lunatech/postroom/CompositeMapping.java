@@ -1,29 +1,26 @@
 package com.lunatech.postroom;
 
 import io.vavr.control.Either;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
+import java.util.*;
 import java.util.stream.Collectors;
 
-class NamedCompositeMapping<T> implements Mapping<T> {
+class CompositeMapping<T> implements Mapping<T> {
 
   private final String key;
   private final List<Mapping<?>> mappings;
   private final Structor<T> structor;
   private final List<Constraint<T>> constraints;
 
-  private NamedCompositeMapping(String key, List<Mapping<?>> mappings, Structor<T> structor, List<Constraint<T>> constraints) {
+  private CompositeMapping(String key, List<Mapping<?>> mappings, Structor<T> structor, List<Constraint<T>> constraints) {
     this.key = key;
     this.mappings = mappings;
     this.structor = structor;
     this.constraints = constraints;
   }
 
-  static <T> NamedCompositeMapping<T> of(List<Mapping<?>> mappings, Structor<T> structor) {
-    return new NamedCompositeMapping<>("", mappings, structor, Collections.emptyList());
+  static <T> CompositeMapping<T> of(List<Mapping<?>> mappings, Structor<T> structor) {
+    return new CompositeMapping<>("", mappings, structor, Collections.emptyList());
   }
 
   @Override
@@ -78,18 +75,16 @@ class NamedCompositeMapping<T> implements Mapping<T> {
   @Override
   public Mapping<T> withPrefix(String prefix) {
     String newKey = key.isEmpty() || prefix.isEmpty() ? prefix + key : prefix + "." + key;
-    return new NamedCompositeMapping<>(newKey, mappings, structor, constraints);
+    return new CompositeMapping<>(newKey, mappings, structor, constraints);
   }
 
   @Override
-  public Mapping<T> withConstraint(Constraint<T> constraint) {
-    ArrayList<Constraint<T>> allConstraints = new ArrayList<>(constraints);
-    allConstraints.add(constraint);
-
-    return new NamedCompositeMapping<>(key, mappings, structor, allConstraints);
+  public Mapping<T> verifying(Collection<Constraint<T>> constraints) {
+    ArrayList<Constraint<T>> allConstraints = new ArrayList<>(this.constraints);
+    allConstraints.addAll(constraints);
+    return new CompositeMapping<>(key, mappings, structor, allConstraints);
   }
 
-  // TODO, put elsewhere?
   public static class CompositeMappingStage {
 
     private final List<Mapping<?>> mappings;
@@ -99,7 +94,7 @@ class NamedCompositeMapping<T> implements Mapping<T> {
     }
 
     public <T> Mapping<T> to(Structor<T> structor) {
-      return NamedCompositeMapping.of(mappings, structor);
+      return CompositeMapping.of(mappings, structor);
     }
   }
 }

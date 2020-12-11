@@ -3,21 +3,22 @@ package com.lunatech.postroom;
 public class FieldMappings {
 
   public static Mapping<String> text() {
-    return new StandardMapping<>(Formatters.stringFormatter);
+    return new FieldMapping<>(Formatters.stringFormatter);
   }
 
   public static Mapping<String> nonEmptyText() {
-    return text().withConstraint(Constraints.of(value -> !value.trim().isEmpty(), "Value should not be empty"));
+    return text().verifying(Constraints.of(value -> !value.trim().isEmpty(),
+            (__) -> "Value should not be empty"));
   }
 
   public static Mapping<Integer> integer() {
-    return new StandardMapping<>(Formatters.integerFormatter);
+    return new FieldMapping<>(Formatters.integerFormatter);
   }
 
   public static Mapping<Integer> integer(int minValue, int maxValue) {
-    String message = "Value should be between " + minValue + " and " + maxValue + ", inclusive";
     return integer()
-        .withConstraint(Constraints.of(value -> value >= minValue && value <= maxValue, message));
+        .verifying(Constraints.of(value -> value >= minValue && value <= maxValue, (__) ->
+                "Value should be between " + minValue + " and " + maxValue + ", inclusive"));
   }
 
 }
