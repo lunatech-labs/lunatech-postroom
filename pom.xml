@@ -4,13 +4,13 @@
 
     <groupId>com.lunatech.postroom</groupId>
     <artifactId>postroom-parent</artifactId>
-    <version>0.2</version>
+    <version>0.3-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <scm>
         <developerConnection>scm:git:git@github.com:lunatech-labs/lunatech-postroom.git</developerConnection>
         <url>https://github.com/lunatech-labs/lunatech-postroom</url>
-      <tag>postroom-parent-0.2</tag>
+      <tag>HEAD</tag>
   </scm>
 
     <properties>
