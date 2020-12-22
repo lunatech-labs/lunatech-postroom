@@ -33,6 +33,10 @@ public interface Mapping<T> {
   }
 
   default <U> Mapping<U> transform(Function<T, U> map, Function<U, T> contramap) {
-    return new TransformedMapping<>(this, map, contramap);
+    return transformVerifying(t -> ValidationResult.valid(map.apply(t)), contramap);
+  }
+
+  default <U> Mapping<U> transformVerifying(Function<T, ValidationResult<U>> map, Function<U, T> contramap) {
+    return new TransformedMapping<>(this, map, contramap, Collections.emptyList());
   }
 }

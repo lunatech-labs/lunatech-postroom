@@ -2,12 +2,9 @@ package com.lunatech.postroom;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
-import static com.lunatech.postroom.FieldMappings.text;
+import static com.lunatech.postroom.FieldMappings.*;
 import static com.lunatech.postroom.Mappings.field;
 import static com.lunatech.postroom.Mappings.mapping;
 import static com.lunatech.postroom.PublicFieldsStructor.publicFields;
@@ -157,6 +154,53 @@ public class FormTest {
     assertEquals(
             Collections.singletonList(new FormError("foo", "Length should be at least 4")),
             form.bind(Collections.singletonMap("foo", "wo")).getErrors("foo"));
+
+  }
+
+  static class T {
+    public Optional<String> foo;
+    public Optional<String> bar;
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o)
+        return true;
+      if (o == null || getClass() != o.getClass())
+        return false;
+
+      T t = (T) o;
+
+      if (!foo.equals(t.foo))
+        return false;
+      return bar.equals(t.bar);
+    }
+
+    @Override
+    public int hashCode() {
+      int result = foo.hashCode();
+      result = 31 * result + bar.hashCode();
+      return result;
+    }
+
+  }
+
+  @Test
+  public void testOptional() {
+    Form<T> form = Form.of(mapping(
+            field("foo", optional(nonEmptyText())),
+            field("bar", optional(nonEmptyText())))
+    .to(publicFields(T.class)));
+
+    Map<String, String> data = new HashMap<>();
+    data.put("foo", "hey");
+
+    T expected = new T();
+    expected.foo = Optional.of("hey");
+    expected.bar = Optional.empty();
+
+    assertEquals(
+            expected,
+            form.bind(data).value());
 
   }
 

@@ -3,12 +3,18 @@ package com.lunatech.postroom;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
-public final class Invalid implements ValidationResult {
+final class Invalid<T> implements ValidationResult<T> {
 
   private final List<String> errors;
 
-  Invalid(String error, String... moreErrors) {
+  static <T> Invalid<T> of(String error, String... moreErrors) {
+    return new Invalid(error, moreErrors);
+  }
+
+  private Invalid(String error, String... moreErrors) {
     errors = new ArrayList<>();
     errors.add(error);
     errors.addAll(Arrays.asList(moreErrors));
@@ -23,4 +29,10 @@ public final class Invalid implements ValidationResult {
   public List<String> getErrors() {
     return errors;
   }
+
+  @Override
+  public <U> U fold(Function<List<String>, U> onInvalid, Function<T, U> onValid) {
+    return onInvalid.apply(errors);
+  }
+
 }
