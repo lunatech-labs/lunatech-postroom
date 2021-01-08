@@ -85,6 +85,43 @@ public class TypedMappingStageTest {
   }
 
   @Test
+  public void testTypedHighArity() {
+    Map<String, String> data = new HashMap<>();
+    data.put("field1", "1");
+    data.put("field2", "2");
+    data.put("field3", "3");
+    data.put("field4", "4");
+    data.put("field5", "5");
+    data.put("field6", "6");
+    data.put("field7", "7");
+    data.put("field8", "8");
+    data.put("field9", "9");
+    data.put("field10", "10");
+    data.put("field11", "11");
+    data.put("field12", "12");
+
+    final Form<Integer> typedUserForm = Form.<Integer>of(typed(
+            field("field1", integer()),
+            field("field2", integer()),
+            field("field3", integer()),
+            field("field4", integer()),
+            field("field5", integer()),
+            field("field6", integer()),
+            field("field7", integer()),
+            field("field8", integer()),
+            field("field9", integer()),
+            field("field10", integer()),
+            field("field11", integer()),
+            field("field12", integer()))
+            .to((i1, i2, i3, i4, i5, i6, i7, i8, i9, i10, i11, i12) ->
+                    i1 + i2 + i3 + i4 + i5 + i6 + i7 + i8 + i9 + i10 + i11 + i12,
+                (Integer sum) -> parts(sum, sum, sum, sum, sum, sum, sum, sum, sum, sum, sum, sum)));
+    Integer boundSum = typedUserForm.bind(data).value();
+
+    assertEquals(78, boundSum);
+  }
+
+  @Test
   public void testSemiTyped() {
     Map<String, String> data = new HashMap<>();
     data.put("name", "Erik");
