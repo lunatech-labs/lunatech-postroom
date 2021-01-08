@@ -57,6 +57,21 @@ public class GeneratorMojo extends AbstractMojo {
 
     }
 
+    // Up to arity 8 is provided by vavr.
+    for(int i = 9; i <= maxArity; i++) {
+      Path file = targetFolder.toPath()
+              .resolve("com/lunatech/postroom/typed/Function" + i + ".java");
+      file.toFile().getParentFile().mkdirs();
+
+      if (!file.toFile().exists()) {
+        try (BufferedWriter out = Files.newBufferedWriter(file)) {
+          out.write(Generator.generateFunctionN(i));
+        } catch (IOException e) {
+          throw new MojoExecutionException("Generating Function failed", e);
+        }
+      }
+    }
+
     Path mappingsFile = targetFolder.toPath().resolve("com/lunatech/postroom/typed/TypedMappings.java");
     if(!mappingsFile.toFile().exists()) {
       try (BufferedWriter out = Files.newBufferedWriter(mappingsFile)) {

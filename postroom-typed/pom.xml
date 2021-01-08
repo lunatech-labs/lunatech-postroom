@@ -35,6 +35,9 @@
                         <goals>
                             <goal>generate</goal>
                         </goals>
+                        <configuration>
+                            <maxArity>20</maxArity>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

@@ -66,7 +66,9 @@ public class Generator {
     sb.append("import com.lunatech.postroom.Structor;\n");
     sb.append("import com.lunatech.postroom.Destructor;\n");
     sb.append("import io.vavr.Function1;\n");
-    sb.append("import io.vavr.Function" + i + ";\n");
+    if(i <= 8) {
+      sb.append("import io.vavr.Function" + i + ";\n");
+    }
     sb.append("import io.vavr.control.Either;\n");
     sb.append("import java.lang.invoke.MethodHandle;");
     sb.append("import java.lang.invoke.MethodHandles;");
@@ -140,6 +142,21 @@ public class Generator {
     sb.append("  }\n");
     sb.append("}");
 
+    return sb.toString();
+  }
+
+  public static String generateFunctionN(int i) {
+    StringBuilder sb = new StringBuilder();
+    sb.append("package com.lunatech.postroom.typed;\n\n");
+
+    sb.append("@FunctionalInterface\n");
+    sb.append("public interface Function" + i);
+    sb.append(IntStream.range(1, i + 1).boxed().map(v -> "I" + v)
+            .collect(Collectors.joining(", ", "<", ", T> {\n")));
+    sb.append(IntStream.range(1, i + 1).boxed().map(v -> "I" + v + " i" + v)
+            .collect(Collectors.joining(", ", "  T apply(", ");\n")));
+
+    sb.append("}");
     return sb.toString();
   }
 
